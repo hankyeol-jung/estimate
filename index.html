@@ -328,7 +328,7 @@
               <div class="grid grid-cols-3 gap-5 mb-2">
                 <input
                   type="text"
-                  placeholder="인건비"
+                  placeholder="브로슈어"
                   class="w-full px-2 py-1 border border-gray-300 rounded-md category"
                 />
                 <input
@@ -365,6 +365,9 @@
               뒤로가기
             </button>
           </div>
+          <small class="inline-block mt-10"
+            >※ 버그 있을경우 또는 추가 기능을 원할경우 연락바랍니다.</small
+          >
         </div>
       </div>
     </div>
@@ -429,10 +432,10 @@
           .on("input", function () {
             var inputText = $(this).val();
             var inputNum = Number(inputText);
-            var tax = Number(inputText) / 10;
             var num = $("div>.num").eq(b).val();
-            var total = (inputNum + tax) * num;
             var supply = inputNum * num;
+            var tax = supply / 10;
+            var total = supply + tax;
             supplyTotal[b] = supply;
             taxTotal[b] = tax;
             priceTotal[b] = total;
@@ -464,7 +467,7 @@
 
             $(".supplyTotal").text("₩ " + supplyTotalVal.toLocaleString());
             $(".taxTotal").text("₩ " + taxTotalVal.toLocaleString());
-            $(".priceTotal").text("₩ " + priceTotallVal.toLocaleString());
+            $(".priceTotal").text(priceTotallVal.toLocaleString());
           });
       }
       function taxFunc(a, b) {
@@ -475,8 +478,8 @@
             var inputNum = Number($(this).val());
             var price = Number($("div>.price").eq(b).val());
             var supply = price * inputNum;
-            var tax = price / 10;
-            var total = (price + tax) * inputNum;
+            var tax = supply / 10;
+            var total = supply + tax;
             supplyTotal[b] = supply;
             taxTotal[b] = tax;
             priceTotal[b] = total;
@@ -498,13 +501,17 @@
               .eq(b)
               .text("₩ " + supply.toLocaleString());
 
+            $("tr .tax")
+              .eq(b)
+              .text("₩ " + tax.toLocaleString());
+
             $("tr .total")
               .eq(b)
               .text("₩ " + total.toLocaleString());
 
             $(".supplyTotal").text("₩ " + supplyTotalVal.toLocaleString());
             $(".taxTotal").text("₩ " + taxTotalVal.toLocaleString());
-            $(".priceTotal").text("₩ " + priceTotallVal.toLocaleString());
+            $(".priceTotal").text(priceTotallVal.toLocaleString());
           });
       }
 
