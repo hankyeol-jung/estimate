@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HS견적서</title>
+
+    <!-- tailwind css -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- pdf변환 -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+      integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- jquery -->
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      p {
+        color: #3e3a39;
+      }
+    </style>
+  </head>
+
+  <body class="">
+    <!-- Button to generate PDF. -->
+    <div class="flex justify-center">
+      <!-- Div to capture. -->
+      <div class="h-screen overflow-scroll" id="home">
+        <div id="main" class="border w-[793px] h-[1121px] mr-0 overflow-hidden">
+          <img src="/images/main.png" class="w-[793px]" alt="" />
+        </div>
+        <div
+          id="root"
+          class="p-11 border w-[793px] h-[1121px] mr-0 overflow-hidden"
+        >
+          <div>
+            <img src="/images/logo.png" class="w-[136px]" alt="" />
+          </div>
+          <div class="w-[669px]">
+            <div
+              class="mt-[143px] flex items-center border-b border-[#717071] pb-[30px]"
+            >
+              <span
+                class="w-[5px] h-[60px] bg-[#3e3a39] rounded-full mr-4"
+              ></span>
+              <div>
+                <p class="text-base font-medium text-[#7d7d7d]">Estimate</p>
+                <p class="font-bold text-[38px] leading-none mt-1">견적서</p>
+              </div>
+            </div>
+
+            <!-- 회사정보 -->
+            <div class="mt-[27px]">
+              <div class="flex mb-2">
+                <div class="flex items-center mr-4 text-xs">
+                  <p class="mr-1 font-medium">사업자번호 :</p>
+                  <p class="font-light compNum"></p>
+                </div>
+                <div class="flex items-center mr-4 text-xs">
+                  <p class="mr-1 font-medium">상호 :</p>
+                  <p class="font-light company"></p>
+                </div>
+              </div>
+              <div class="flex items-center mb-2 mr-4 text-xs">
+                <p class="mr-1 font-medium">주소 :</p>
+                <p class="font-light addr"></p>
+              </div>
+              <div class="flex">
+                <div class="flex items-center mr-4 text-xs">
+                  <p class="mr-1 font-medium">전화 :</p>
+                  <p class="font-light phone">042-257-8350</p>
+                </div>
+                <div class="flex items-center mr-4 text-xs">
+                  <p class="mr-1 font-medium">이메일 :</p>
+                  <p class="font-light email">hscompany1017@naver.com</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 견적명 / 견적금액 -->
+            <div class="flex justify-between mt-8">
+              <div class="text-sm">
+                <p class="font-medium">
+                  견적명 : <b class="font-medium estimate">작업명</b>
+                </p>
+                <p class="font-medium">
+                  발주자 : <b class="font-medium order">발주업체명</b>
+                </p>
+              </div>
+              <div class="flex items-end">
+                <p class="text-sm font-bold mr-[26px]">견적금액 :</p>
+                <p class="text-[17px] font-bold mr-px">₩</p>
+                <p
+                  class="border-b border-[#231815] min-w-[117px] text-right px-[6px] mr-[6px] font-bold priceTotal"
+                ></p>
+                <p class="mr-px text-sm font-bold">원 (VAT포함)</p>
+              </div>
+            </div>
+
+            <!-- 테이블 -->
+            <table class="w-full mt-5">
+              <thead
+                class="bg-gradient-to-r from-[#00aeeb] to-[#692eff] text-white font-bold text-xs border-white"
+              >
+                <th class="rounded-tl-[11px] py-2 border-r w-[211px]">항 목</th>
+                <th class="w-10 py-2 border-r">수 량</th>
+                <th class="w-24 py-2 border-r">단 가</th>
+                <th class="py-2 border-r w-[104px]">공 급 가 액</th>
+                <th class="py-2 border-r w-[100px]">세 액</th>
+                <th class="rounded-tr-[11px] py-2">금 액</th>
+              </thead>
+              <tbody class="text-xs font-medium text-center border-[#999999]">
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr class="border-b border-[#999999] h-[33px]">
+                  <td class="border-r border-[#999999] category"></td>
+                  <td class="border-r border-[#999999] num"></td>
+                  <td class="border-r border-[#999999] price"></td>
+                  <td class="border-r border-[#999999] supply"></td>
+                  <td class="border-r border-[#999999] tax"></td>
+                  <td class="border-[#999999] total"></td>
+                </tr>
+                <tr
+                  class="border-b-2 bg-[#efefef] border-[#999999] h-[33px] font-bold"
+                >
+                  <td class="border-r border-[#999999]" colspan="3">
+                    합 계 (VAT별도)
+                  </td>
+                  <td class="border-r border-[#999999] supplyTotal"></td>
+                  <td class="border-r border-[#999999] taxTotal"></td>
+                  <td class="border-[#999999] priceTotal"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- 도장 / 날짜 -->
+            <div class="flex justify-between mt-6">
+              <p class="text-xs font-light leading-relaxed">
+                산업디자인전문회사 - 제 12598 호<br />
+                연구개발서비스업 - 제 20213042 호
+              </p>
+              <div>
+                <p class="text-xs font-light leading-relaxed">
+                  위와 같이 프로젝트 견적을 제안합니다.<br />
+                  유효기간 : 견적일로부터 1개월
+                </p>
+                <p class="mt-8 text-xs font-light leading-relaxed date">
+                  2022년 01월 01일
+                </p>
+                <div class="flex text-sm font-bold leading-relaxed mt-7">
+                  <p class="mr-[64px]">주식회사 에이치에스컴퍼니</p>
+                  <p>(인)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-[300px] h-10 ml-auto relative">
+            <div class="absolute bottom-[15px] right-2">
+              <img src="/images/name.png" class="w-[80px]" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-10">
+        <div class="p-10 border">
+          <div>
+            <!-- 사업자 상호 -->
+            <div class="flex mb-5">
+              <div class="mr-10">
+                <label for="" class="inline-block w-20 mr-2">사업자번호</label>
+                <input
+                  id="compNum"
+                  type="text"
+                  value="422-87-01495"
+                  class="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div>
+                <label for="" class="inline-block w-20 mr-2">상호</label>
+                <input
+                  type="text"
+                  id="company"
+                  value="HS COMPANY lnc."
+                  class="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
+            <div class="flex w-full mb-5">
+              <div class="flex items-center justify-between w-full">
+                <label for="" class="inline-block w-20 mr-2">주소</label>
+                <input
+                  type="text"
+                  id="addr"
+                  value="대전광역시 중구 중앙로121번길 20, 3층(선화동)"
+                  class="w-[calc(100%_-_80px_-_10px)] px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
+            <div class="flex mb-5">
+              <div class="mr-10">
+                <label for="" class="inline-block w-20 mr-2">전화</label>
+                <input
+                  type="text"
+                  id="phone"
+                  value="042-257-8350"
+                  class="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div>
+                <label for="" class="inline-block w-20 mr-2">이메일</label>
+                <input
+                  type="text"
+                  id="email"
+                  value="hscompany1017@naver.com"
+                  class="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
+            <div class="flex pt-5 mb-5 border-t">
+              <div class="mr-10">
+                <label for="" class="inline-block w-20 mr-2">견적명</label>
+                <input
+                  type="text"
+                  id="estimate"
+                  placeholder="작업명"
+                  class="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div>
+                <label for="" class="inline-block w-20 mr-2">발주자</label>
+                <input
+                  type="text"
+                  id="order"
+                  placeholder="발주업체명"
+                  class="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
+            <div class="flex w-full mb-5">
+              <div class="flex items-center justify-between w-full">
+                <label for="" class="inline-block w-20 mr-2">날짜</label>
+                <input
+                  type="date"
+                  id="date"
+                  value="대전광역시 중구 중앙로121번길 20, 3층(선화동)"
+                  class="w-[calc(100%_-_80px_-_10px)] px-2 py-1 border border-gray-300 rounded-md text-center"
+                />
+              </div>
+            </div>
+            <div class="pt-5 mb-5 border-t">
+              <div class="grid grid-cols-3 gap-5">
+                <label for="" class="inline-block mr-2">항목</label>
+                <label for="" class="inline-block mr-2">수량</label>
+                <label for="" class="inline-block mr-2">단가</label>
+              </div>
+              <div class="grid grid-cols-3 gap-5 mb-2">
+                <input
+                  type="text"
+                  placeholder="인건비"
+                  class="w-full px-2 py-1 border border-gray-300 rounded-md category"
+                />
+                <input
+                  type="text"
+                  placeholder="1"
+                  class="w-full px-2 py-1 border border-gray-300 rounded-md num"
+                />
+                <input
+                  type="text"
+                  placeholder="10000"
+                  class="w-full px-2 py-1 border border-gray-300 rounded-md price"
+                />
+              </div>
+              <button
+                id="add"
+                class="px-4 py-2 mt-5 text-white transition-all rounded-full bg-sky-400 hover:bg-sky-600"
+                type="button"
+              >
+                항목추가
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-center w-full">
+            <button
+              class="w-40 px-4 py-2 mx-auto mt-5 text-white transition-all rounded-full change bg-sky-400 hover:bg-sky-600"
+              onclick="estimate(),change()"
+            >
+              PDF 변환
+            </button>
+            <button
+              onclick="goBack()"
+              class="hidden w-40 px-4 py-2 mx-auto mt-5 text-white transition-all rounded-full back bg-sky-400 hover:bg-sky-600"
+            >
+              뒤로가기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include html2pdf bundle. -->
+    <script src="../../dist/html2pdf.bundle.js"></script>
+
+    <script>
+      var supplyTotal = [];
+      var taxTotal = [];
+      var priceTotal = [];
+
+      function textNormal(a) {
+        $("." + a).text($("#" + a).val());
+      }
+      function inputFunc(a) {
+        $("#" + a).on("input", function () {
+          var inputText = $(this).val();
+          $("." + a).text(inputText);
+        });
+      }
+      function formatDate(dateValue) {
+        var date = new Date(dateValue);
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1).toString().padStart(2, "0");
+        var day = date.getDate().toString().padStart(2, "0");
+
+        return year + "년 " + month + "월 " + day + "일";
+      }
+      $("#date").on("input", function () {
+        var inputText = $(this).val();
+        $(".date").text(formatDate(inputText));
+      });
+
+      $("#add").on("click", function () {
+        if ($("input.category").length < 9) {
+          $(this).before(
+            "<div class='grid grid-cols-3 gap-5 mb-2'> <input type='text' class='w-full px-2 py-1 border border-gray-300 rounded-md category' /> <input type='text' class='w-full px-2 py-1 border border-gray-300 rounded-md num' /> <input type='text' class='w-full px-2 py-1 border border-gray-300 rounded-md price' /> </div>"
+          );
+          // 새로 추가된 input 요소에 이벤트 핸들러 등록
+          categoryFunc("category", $("input.category").length - 1);
+          taxFunc("num", $("input.num").length - 1);
+          priceFunc("price", $("input.price").length - 1);
+        } else {
+          alert("항목을 최대 9개까지만 가능합니다.");
+        }
+      });
+
+      function categoryFunc(a, b) {
+        $("div>." + a)
+          .eq(b)
+          .on("input", function () {
+            var inputText = $(this).val();
+            $("tr ." + a)
+              .eq(b)
+              .text(inputText);
+          });
+      }
+      function priceFunc(a, b) {
+        $("div>." + a)
+          .eq(b)
+          .on("input", function () {
+            var inputText = $(this).val();
+            var inputNum = Number(inputText);
+            var tax = Number(inputText) / 10;
+            var num = $("div>.num").eq(b).val();
+            var total = (inputNum + tax) * num;
+            var supply = inputNum * num;
+            supplyTotal[b] = supply;
+            taxTotal[b] = tax;
+            priceTotal[b] = total;
+            var supplyTotalVal = supplyTotal.reduce(function (acc, cur) {
+              return acc + cur;
+            }, 0);
+            var taxTotalVal = taxTotal.reduce(function (acc, cur) {
+              return acc + cur;
+            }, 0);
+            var priceTotallVal = priceTotal.reduce(function (acc, cur) {
+              return acc + cur;
+            }, 0);
+
+            $("tr ." + a)
+              .eq(b)
+              .text("₩ " + inputNum.toLocaleString());
+
+            $("tr .supply")
+              .eq(b)
+              .text("₩ " + supply.toLocaleString());
+
+            $("tr .tax")
+              .eq(b)
+              .text("₩ " + tax.toLocaleString());
+
+            $("tr .total")
+              .eq(b)
+              .text("₩ " + total.toLocaleString());
+
+            $(".supplyTotal").text("₩ " + supplyTotalVal.toLocaleString());
+            $(".taxTotal").text("₩ " + taxTotalVal.toLocaleString());
+            $(".priceTotal").text("₩ " + priceTotallVal.toLocaleString());
+          });
+      }
+      function taxFunc(a, b) {
+        $("div>." + a)
+          .eq(b)
+          .on("input", function () {
+            var inputText = $(this).val();
+            var inputNum = Number($(this).val());
+            var price = Number($("div>.price").eq(b).val());
+            var supply = price * inputNum;
+            var tax = price / 10;
+            var total = (price + tax) * inputNum;
+            supplyTotal[b] = supply;
+            taxTotal[b] = tax;
+            priceTotal[b] = total;
+            var supplyTotalVal = supplyTotal.reduce(function (acc, cur) {
+              return acc + cur;
+            }, 0);
+            var taxTotalVal = taxTotal.reduce(function (acc, cur) {
+              return acc + cur;
+            }, 0);
+            var priceTotallVal = priceTotal.reduce(function (acc, cur) {
+              return acc + cur;
+            }, 0);
+
+            $("tr ." + a)
+              .eq(b)
+              .text(inputNum.toLocaleString());
+
+            $("tr .supply")
+              .eq(b)
+              .text("₩ " + supply.toLocaleString());
+
+            $("tr .total")
+              .eq(b)
+              .text("₩ " + total.toLocaleString());
+
+            $(".supplyTotal").text("₩ " + supplyTotalVal.toLocaleString());
+            $(".taxTotal").text("₩ " + taxTotalVal.toLocaleString());
+            $(".priceTotal").text("₩ " + priceTotallVal.toLocaleString());
+          });
+      }
+
+      for (let i = 0; i < 9; i++) {
+        categoryFunc("category", i);
+        taxFunc("num", i);
+        priceFunc("price", i);
+      }
+
+      textNormal("compNum");
+      textNormal("company");
+      textNormal("addr");
+      textNormal("phone");
+      textNormal("email");
+
+      inputFunc("compNum");
+      inputFunc("company");
+      inputFunc("addr");
+      inputFunc("phone");
+      inputFunc("email");
+
+      inputFunc("estimate");
+      inputFunc("order");
+
+      function change() {
+        $(".back").removeClass("hidden");
+        $(".change").addClass("hidden");
+      }
+      function goBack() {
+        location.reload();
+      }
+      $(document).ready(function () {
+        var homeElement = $("#home");
+        var scrollToBottom =
+          homeElement.prop("scrollHeight") - homeElement.height();
+        homeElement.scrollTop(scrollToBottom);
+      });
+      function estimate() {
+        var container = document.createElement("div");
+        container.appendChild(document.getElementById("main"));
+        container.appendChild(document.getElementById("root"));
+
+        // Generate the PDF.
+        html2pdf()
+          .from(container)
+          .set({
+            margin: 0,
+            filename: "estimate.pdf",
+            html2canvas: {
+              scale: 2, // 확대 비율을 높여 화질 개선
+              useCORS: true, // CORS를 사용하여 이미지 화질 개선
+            },
+            jsPDF: {
+              orientation: "portrait",
+              unit: "mm",
+              format: "a4",
+              compressPDF: true,
+            },
+          })
+          .save();
+      }
+    </script>
+  </body>
+</html>
